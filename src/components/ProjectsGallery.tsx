@@ -11,6 +11,7 @@ const projects = [
         image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2021&auto=format&fit=crop',
         color: 'from-purple-500/20 to-blue-500/20',
         url: 'https://travel-mu-five.vercel.app/',
+        tech: ['React', 'Tailwind CSS', 'Framer Motion'],
     },
     {
         id: 2,
@@ -20,6 +21,7 @@ const projects = [
         image: 'https://picsum.photos/400/400?grayscale',
         color: 'from-pink-500/20 to-orange-500/20',
         url: 'https://bad-ui-nuit.vercel.app/',
+        tech: ['React', 'Tailwind CSS', 'Creative Coding'],
     },
     {
         id: 3,
@@ -29,6 +31,7 @@ const projects = [
         image: 'https://picsum.photos/500/500?grayscale',
         color: 'from-green-500/20 to-cyan-500/20',
         url: 'https://c2i-eight.vercel.app/',
+        tech: ['React', 'JSX', 'Tailwind', 'MongoDB', 'Node.js', 'Express.js'],
     },
     {
         id: 4,
@@ -38,6 +41,7 @@ const projects = [
         image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop',
         color: 'from-blue-600/20 to-indigo-500/20',
         url: 'https://github.com/AmineBarh/Projet-php-GOODJOBS',
+        tech: ['PHP', 'MySQL', 'Bootstrap', 'PDO', 'HTML', 'CSS', 'JS'],
     },
     {
         id: 5,
@@ -47,6 +51,7 @@ const projects = [
         image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop',
         color: 'from-orange-500/20 to-red-500/20',
         url: 'https://github.com/AmineBarh/Restaurant-booking',
+        tech: ['ReactJS', 'Tailwind CSS', 'MongoDB', 'Node.js', 'Express.js'],
     },
 ];
 
@@ -72,7 +77,7 @@ const ProjectCard = ({
             onMouseLeave={() => setIsHovered(false)}
         >
             <motion.div
-                className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden cursor-pointer group"
+                className="relative h-[450px] md:h-[550px] rounded-2xl overflow-hidden cursor-pointer group"
                 animate={{
                     scale: isHovered ? 1.02 : 1,
                 }}
@@ -85,7 +90,7 @@ const ProjectCard = ({
 
                 {/* Image */}
                 <motion.div
-                    className="absolute inset-0"
+                    className="absolute inset-0 h-3/5"
                     animate={{
                         scale: isHovered ? 1.1 : 1,
                     }}
@@ -96,13 +101,11 @@ const ProjectCard = ({
                         alt={project.title}
                         className="w-full h-full object-cover opacity-80"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
                 </motion.div>
 
-                {/* Glass overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-
-                {/* Content */}
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
+                {/* Glass overlay/Content Container */}
+                <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
                     <motion.div
                         animate={{ y: isHovered ? -10 : 0 }}
                         transition={{ duration: 0.3 }}
@@ -116,6 +119,15 @@ const ProjectCard = ({
                         <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
                             {project.description}
                         </p>
+
+                        {/* Tech Stack Tags */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            {project.tech.map((tech) => (
+                                <span key={tech} className="px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-white/70 bg-white/5 border border-white/10 rounded-md">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
                     </motion.div>
 
                     {/* View button */}
@@ -257,9 +269,21 @@ const ProjectsGallery = () => {
                                         <h3 className="font-display text-3xl md:text-4xl font-bold mb-4">
                                             {selectedProject.title}
                                         </h3>
-                                        <p className="text-muted-foreground leading-relaxed mb-8">
+                                        <p className="text-muted-foreground leading-relaxed mb-6">
                                             {selectedProject.description}
                                         </p>
+
+                                        {/* Tech Stack in Modal */}
+                                        <div className="mb-8">
+                                            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Technologies</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {selectedProject.tech.map((tech) => (
+                                                    <span key={tech} className="px-3 py-1.5 text-xs font-medium text-white/80 bg-white/5 border border-white/10 rounded-lg">
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
 
                                         <div className="flex gap-4 mt-auto">
                                             <a
