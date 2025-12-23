@@ -64,7 +64,7 @@ const Navigation = () => {
                         whileTap={{ scale: 0.95 }}
                         data-magnetic
                     >
-                        CD<span className="text-primary">.</span>
+                        {/* M.A.<span className="text-primary">B.</span> */}
                     </motion.a>
 
                     {/* Nav Items */}
@@ -74,8 +74,8 @@ const Navigation = () => {
                                 key={item.label}
                                 onClick={() => scrollToSection(item.href)}
                                 className={`relative px-4 py-2 text-sm font-medium tracking-wide uppercase transition-colors ${activeSection === item.href.slice(1)
-                                        ? 'text-foreground'
-                                        : 'text-muted-foreground hover:text-foreground'
+                                    ? 'text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground'
                                     }`}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
