@@ -1,4 +1,4 @@
-import { useState, useRef, Suspense, useMemo } from 'react';
+import { useState, useRef, Suspense, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, Html } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -37,7 +37,6 @@ const skills = [
     // Databases
     { name: 'MongoDB', category: 'Database', description: 'Source-available cross-platform document-oriented database program.', status: 'expert' },
     { name: 'MySQL', category: 'Database', description: 'Open-source relational database management system.', status: 'expert' },
-    { name: 'PostgreSQL', category: 'Database', description: 'Advanced open-source relational database.', status: 'expert' },
     { name: 'Optimisation', category: 'Database', description: 'Optimisation de Requêtes for better performance.', status: 'expert' },
     { name: 'Modélisation', category: 'Database', description: 'Modélisation de Données for efficient storage.', status: 'expert' },
 
@@ -57,9 +56,10 @@ interface SkillNodeProps {
     skill: typeof skills[0];
     position: [number, number, number];
     onSelect: (skill: typeof skills[0]) => void;
+    isModalOpen: boolean;
 }
 
-const SkillNode = ({ skill, position, onSelect }: SkillNodeProps) => {
+const SkillNode = ({ skill, position, onSelect, isModalOpen }: SkillNodeProps) => {
     const [hovered, setHovered] = useState(false);
     const meshRef = useRef<THREE.Mesh>(null);
 
@@ -103,10 +103,10 @@ const SkillNode = ({ skill, position, onSelect }: SkillNodeProps) => {
                     style={{ pointerEvents: 'none' }}
                 >
                     <span
-                        className={`text-xs font-sans whitespace-nowrap transition-colors duration-200 ${isLearning
+                        className={`text-xs font-sans whitespace-nowrap transition-all duration-300 ${isLearning
                             ? (hovered ? 'text-orange-200 font-bold' : 'text-orange-300/80')
                             : (hovered ? 'text-white' : 'text-muted-foreground')
-                            }`}
+                            } ${isModalOpen ? 'opacity-0' : 'opacity-100'}`}
                     >
                         {skill.name} {isLearning && '*'}
                     </span>
@@ -116,7 +116,7 @@ const SkillNode = ({ skill, position, onSelect }: SkillNodeProps) => {
     );
 };
 
-const SkillsCloud = ({ onSelect }: { onSelect: (skill: typeof skills[0]) => void }) => {
+const SkillsCloud = ({ onSelect, isModalOpen }: { onSelect: (skill: typeof skills[0]) => void, isModalOpen: boolean }) => {
     const groupRef = useRef<THREE.Group>(null);
 
     useFrame(({ clock }) => {
@@ -146,6 +146,7 @@ const SkillsCloud = ({ onSelect }: { onSelect: (skill: typeof skills[0]) => void
                     skill={skill}
                     position={positions[i]}
                     onSelect={onSelect}
+                    isModalOpen={isModalOpen}
                 />
             ))}
             {/* Core glow */}
@@ -160,6 +161,23 @@ const SkillsCloud = ({ onSelect }: { onSelect: (skill: typeof skills[0]) => void
 
 const SkillsSphere = () => {
     const [selectedSkill, setSelectedSkill] = useState<typeof skills[0] | null>(null);
+
+    // Close modal on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (selectedSkill) {
+                setSelectedSkill(null);
+            }
+        };
+
+        if (selectedSkill) {
+            window.addEventListener('scroll', handleScroll, { passive: true });
+        }
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [selectedSkill]);
 
     return (
         <section id="skills" className="relative min-h-screen py-24">
@@ -204,7 +222,7 @@ const SkillsSphere = () => {
                     <Suspense fallback={null}>
                         <ambientLight intensity={0.3} />
                         <pointLight position={[10, 10, 10]} intensity={0.5} />
-                        <SkillsCloud onSelect={setSelectedSkill} />
+                        <SkillsCloud onSelect={setSelectedSkill} isModalOpen={!!selectedSkill} />
                         <OrbitControls
                             enableZoom={false}
                             enablePan={false}
@@ -222,7 +240,7 @@ const SkillsSphere = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-6 theatre-mode"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md"
                         onClick={() => setSelectedSkill(null)}
                     >
                         <motion.div

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
@@ -13,6 +13,7 @@ import robotsBanner from '../assets/csgo.jpg'; // Matches "EPI Robots Day 4.0 Ba
 import integrationPoster from '../assets/jpo.png'; // Best guess for "Integration Day"
 import book from '../assets/book csgo.jpg';
 import workshop from '../assets/workshop.png';
+import robotsDay5 from '../assets/Affcihe Finale Event (2).png';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -34,9 +35,9 @@ const designs = [
     },
     {
         id: 3,
-        title: 'EPI Survival Challenge Banner',
-        description: 'Survival Challenge banner',
-        image: survivalBanner,
+        title: 'EPI Robots Day 5.0 Banner',
+        description: 'Robots Day 5.0 banner Themed Arc Reaiders',
+        image: robotsDay5,
     },
     {
         id: 4,
@@ -62,11 +63,35 @@ const designs = [
         description: 'Workshop banner',
         image: workshop,
     },
+    {
+        id: 8,
+        title: 'EPI Survival Challenge Banner',
+        description: 'Survival Challenge banner themed Squid Game',
+        image: survivalBanner,
+    },
+
 ];
 
 const DesignShowcase = () => {
     const [selectedDesign, setSelectedDesign] = useState<typeof designs[0] | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
+
+    // Close modal on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (selectedDesign) {
+                setSelectedDesign(null);
+            }
+        };
+
+        if (selectedDesign) {
+            window.addEventListener('scroll', handleScroll, { passive: true });
+        }
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [selectedDesign]);
 
     return (
         <section id="designs" className="relative py-24 overflow-hidden">
@@ -183,47 +208,50 @@ const DesignShowcase = () => {
             </div>
 
             {/* Lightbox Modal */}
-            {selectedDesign && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
-                    onClick={() => setSelectedDesign(null)}
-                >
+            <AnimatePresence>
+                {selectedDesign && (
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="relative max-w-4xl w-full max-h-[90vh] rounded-2xl overflow-hidden bg-background border border-white/10"
-                        onClick={(e) => e.stopPropagation()}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+                        onClick={() => setSelectedDesign(null)}
                     >
-                        <button
-                            onClick={() => setSelectedDesign(null)}
-                            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-white/20 text-white transition-colors"
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="relative max-w-4xl w-full max-h-[90vh] rounded-2xl overflow-hidden bg-background border border-white/10"
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            <X className="w-6 h-6" />
-                        </button>
+                            <button
+                                onClick={() => setSelectedDesign(null)}
+                                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-white/20 text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
 
-                        <div className="flex flex-col md:flex-row h-full">
-                            <div className="md:w-2/3 max-h-[60vh] md:max-h-[85vh] bg-black">
-                                <img
-                                    src={selectedDesign.image}
-                                    alt={selectedDesign.title}
-                                    className="w-full h-full object-contain"
-                                />
+                            <div className="flex flex-col md:flex-row h-full">
+                                <div className="md:w-2/3 max-h-[60vh] md:max-h-[85vh] bg-black">
+                                    <img
+                                        src={selectedDesign.image}
+                                        alt={selectedDesign.title}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                                <div className="md:w-1/3 p-6 md:p-8 flex flex-col justify-center bg-zinc-900/50 backdrop-blur-md">
+                                    <span className="text-primary text-xs font-bold uppercase tracking-widest mb-2">Design Poster</span>
+                                    <h3 className="text-3xl font-display font-bold mb-4">{selectedDesign.title}</h3>
+                                    <p className="text-muted-foreground leading-relaxed">
+                                        {selectedDesign.description}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="md:w-1/3 p-6 md:p-8 flex flex-col justify-center bg-zinc-900/50 backdrop-blur-md">
-                                <span className="text-primary text-xs font-bold uppercase tracking-widest mb-2">Design Poster</span>
-                                <h3 className="text-3xl font-display font-bold mb-4">{selectedDesign.title}</h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    {selectedDesign.description}
-                                </p>
-                            </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
-                </motion.div>
-            )}
-        </section>
+                )}
+            </AnimatePresence>
+        </section >
     );
 };
 

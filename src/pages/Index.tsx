@@ -7,6 +7,7 @@ import HeroSection from '@/components/HeroSection';
 import SkillsSphere from '@/components/SkillsSphere';
 import ProjectsGallery from '@/components/ProjectsGallery';
 import DesignShowcase from '@/components/DesignShowcase';
+import Publications from '@/components/Publications';
 import ContactSection from '@/components/ContactSection';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 
@@ -55,6 +56,7 @@ const Index = () => {
                 <SkillsSphere />
                 <ProjectsGallery />
                 <DesignShowcase />
+                <Publications />
                 <ContactSection />
             </main>
         </div>
