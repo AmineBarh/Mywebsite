@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowDown, X, GraduationCap, Code2, Briefcase } from 'lucide-react';
+import { ArrowDown, X, GraduationCap, Code2, Briefcase, MapPin, Calendar, Sparkles, Mail, ExternalLink, Cpu, Layers } from 'lucide-react';
 import profilePic from '../assets/profile.jpg';
 import meRobot from '../assets/me-robot.jpg';
 
@@ -21,21 +22,16 @@ const HeroSection = () => {
         };
     }, [isProfileExpanded]);
 
-    // Close modal on scroll
+    // Handle ESC key to close modal
     useEffect(() => {
-        const handleScroll = () => {
-            if (isProfileExpanded) {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isProfileExpanded) {
                 setIsProfileExpanded(false);
             }
         };
 
-        if (isProfileExpanded) {
-            window.addEventListener('scroll', handleScroll, { passive: true });
-        }
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isProfileExpanded]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -49,6 +45,14 @@ const HeroSection = () => {
 
     const scrollToSkills = () => {
         const element = document.getElementById('skills');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const scrollToContact = () => {
+        setIsProfileExpanded(false);
+        const element = document.getElementById('contact');
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
@@ -98,15 +102,19 @@ const HeroSection = () => {
 
             <div className="container relative z-10 px-6 md:px-12 pt-24 md:pt-16">
                 <div className="max-w-6xl mx-auto text-center">
-                    {/* Overline */}
+                    {/* Overline Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.5 }} // Reduced delay for faster appearance
+                        transition={{ duration: 0.8, delay: 0.5 }}
                         className="mb-4 relative z-20"
                     >
-                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-medium tracking-[0.2em] uppercase text-primary hover:text-primary-foreground hover:bg-primary/20 transition-colors">
-                            Available for Internship
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 border border-primary/40 backdrop-blur-md text-xs font-semibold tracking-[0.15em] uppercase text-primary hover:bg-primary/10 transition-colors shadow-lg">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                            </span>
+                            Seeking Final Year Internship · Feb 2027
                         </span>
                     </motion.div>
 
@@ -187,125 +195,239 @@ const HeroSection = () => {
                 </div>
             </div>
 
-            {/* Profile Expansion Modal */}
-            <AnimatePresence>
-                {isProfileExpanded && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
-                        onClick={() => setIsProfileExpanded(false)}
-                    >
+            {/* Profile Expansion Modal in Portal */}
+            {typeof document !== 'undefined' && createPortal(
+                <AnimatePresence>
+                    {isProfileExpanded && (
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="relative max-w-7xl w-full bg-background/50 glass border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
-                            onClick={(e) => e.stopPropagation()}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl"
+                            data-lenis-prevent="true"
+                            data-lenis-prevent-wheel="true"
+                            data-lenis-prevent-touch="true"
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
+                            onClick={() => setIsProfileExpanded(false)}
                         >
-                            <button
-                                onClick={() => setIsProfileExpanded(false)}
-                                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/20 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                            <motion.div
+                                initial={{ scale: 0.92, opacity: 0, y: 30 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.92, opacity: 0, y: 30 }}
+                                transition={{ type: "spring", damping: 28, stiffness: 280 }}
+                                className="relative max-w-5xl w-full h-[92vh] max-h-[92vh] bg-background/80 glass border border-white/15 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+                                data-lenis-prevent="true"
+                                data-lenis-prevent-wheel="true"
+                                data-lenis-prevent-touch="true"
+                                onWheel={(e) => e.stopPropagation()}
+                                onTouchMove={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                             >
-                                <X className="w-6 h-6" />
-                            </button>
+                                {/* Top decorative glow beam */}
+                                <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent z-20" />
 
-                            <div className="flex flex-col md:flex-row">
-                                {/* Image Side */}
-                                <div
-                                    className="md:w-5/12 relative h-64 md:h-auto overflow-hidden cursor-crosshair group"
-                                    ref={imageContainerRef}
-                                    onMouseMove={handleMouseMove}
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 md:hidden" />
+                                {/* Header Toolbar */}
+                                <div className="relative z-20 shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40 backdrop-blur-md">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span className="px-3 py-1 rounded-full bg-primary/15 text-primary text-xs font-semibold uppercase tracking-wider border border-primary/20">
+                                            Engineer Profile
+                                        </span>
+                                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold uppercase tracking-wider border border-emerald-500/20">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                            Available Feb 2027
+                                        </span>
+                                    </div>
 
-                                    {/* Bottom Image (Robot) */}
-                                    <img
-                                        src={meRobot}
-                                        alt="Robot Transformation"
-                                        className="absolute inset-0 w-full h-full object-cover object-top"
-                                    />
-
-                                    {/* Top Image (Profile) with Mask */}
-                                    <motion.img
-                                        src={profilePic}
-                                        alt="Mohamed Amine Barhoumi"
-                                        className="relative w-full h-full object-cover object-top z-10"
-                                        style={{
-                                            maskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 60%, black 100%)`,
-                                            WebkitMaskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 60%, black 100%)`
-                                        }}
-                                    />
+                                    <button
+                                        onClick={() => setIsProfileExpanded(false)}
+                                        className="p-2 rounded-full glass hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+                                        aria-label="Close modal"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
                                 </div>
 
-                                {/* Content Side */}
-                                <div className="md:w-7/12 p-8 md:p-12 text-left overflow-y-auto max-h-[60vh] md:max-h-[80vh] custom-scrollbar">
-                                    <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium tracking-widest uppercase mb-4">
-                                        Engineering Student
-                                    </span>
+                                {/* Modal Body */}
+                                <div className="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
+                                    {/* Image Side */}
+                                    <div
+                                        className="md:w-5/12 relative h-64 md:h-full shrink-0 overflow-hidden cursor-crosshair group bg-black/40 border-b md:border-b-0 md:border-r border-white/10"
+                                        ref={imageContainerRef}
+                                        onMouseMove={handleMouseMove}
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent z-10 md:hidden" />
 
-                                    <h2 className="font-display text-3xl md:text-5xl font-bold mb-6">
-                                        Mohamed Amine Barhoumi
-                                    </h2>
+                                        {/* Bottom Image (Robot Transformation) */}
+                                        <img
+                                            src={meRobot}
+                                            alt="Robot Transformation"
+                                            className="absolute inset-0 w-full h-full object-cover object-top"
+                                        />
 
-                                    <div className="space-y-8">
-                                        <div className="text-white/80 leading-relaxed text-sm md:text-base space-y-4">
-                                            <p>
-                                                Currently pursuing a double degree in <strong className="text-white">Artificial Intelligence</strong> at EPI International Multidisciplinary School and <strong className="text-white">ESIEA</strong>, with an expected graduation date in 2027.
-                                                During my most recent internship at <strong className="text-white">C2i Group</strong>, I contributed to secure data communication projects using AES encryption and Base64 encoding, designed an MQTT publisher-subscriber system, and developed a responsive and user-friendly website to present the organization’s services and training programs.
+                                        {/* Top Image (Profile) with Interactive Mask */}
+                                        <motion.img
+                                            src={profilePic}
+                                            alt="Mohamed Amine Barhoumi"
+                                            className="relative w-full h-full object-cover object-top z-10"
+                                            style={{
+                                                maskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 60%, black 100%)`,
+                                                WebkitMaskImage: `radial-gradient(circle 180px at ${mousePos.x}px ${mousePos.y}px, transparent 60%, black 100%)`
+                                            }}
+                                        />
+
+                                        {/* Hover helper badge */}
+                                        <div className="absolute bottom-4 left-4 z-20 hidden md:block">
+                                            <span className="px-3 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] text-white/70 border border-white/10">
+                                                Move cursor to reveal
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Content Side */}
+                                    <div
+                                        className="md:w-7/12 flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10 space-y-8"
+                                        data-lenis-prevent="true"
+                                        data-lenis-prevent-wheel="true"
+                                        data-lenis-prevent-touch="true"
+                                        onWheel={(e) => e.stopPropagation()}
+                                        onTouchMove={(e) => e.stopPropagation()}
+                                        style={{
+                                            overscrollBehavior: 'contain',
+                                            WebkitOverflowScrolling: 'touch'
+                                        }}
+                                    >
+                                        {/* Name & Title */}
+                                        <div>
+                                            <h2 className="font-display text-3xl md:text-5xl font-bold mb-2 text-white">
+                                                Mohamed Amine Barhoumi
+                                            </h2>
+                                            <p className="text-primary text-base md:text-lg font-medium mb-4">
+                                                AI, IoT & Full-Stack Software Engineer
+                                            </p>
+
+                                            {/* Key Info Pill Badges */}
+                                            <div className="flex flex-wrap gap-2 pt-1">
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white/90">
+                                                    <MapPin className="w-3.5 h-3.5 text-accent" />
+                                                    Paris, France
+                                                </span>
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white/90">
+                                                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                                                    Final Year Internship (Feb 2027)
+                                                </span>
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white/90">
+                                                    <GraduationCap className="w-3.5 h-3.5 text-purple-400" />
+                                                    ESIEA Paris · Double Degree
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Bio / Summary */}
+                                        <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3">
+                                            <h3 className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
+                                                <Sparkles className="w-3.5 h-3.5" />
+                                                About Me
+                                            </h3>
+                                            <p className="text-white/85 leading-relaxed text-sm md:text-base">
+                                                Currently pursuing a double degree in <strong className="text-white">Artificial Intelligence & Data Science</strong> at <strong className="text-white">ESIEA Paris</strong> and <strong className="text-white">EPI Tunisia</strong>, graduating in 2027. Based in <strong className="text-white">Paris, France</strong>, I am actively searching for a <strong className="text-primary">6-month Final Year Internship (PFE / Stage de Fin d'Études)</strong> starting in <strong className="text-white">February 2027</strong>.
+                                            </p>
+                                            <p className="text-white/85 leading-relaxed text-sm md:text-base">
+                                                My work combines embedded AI, computer vision pipelines (YOLO11, U-Net, ONNX), end-to-end IoT sensor chains (ESP32, LoRa, MQTT), containerized backends (Node.js, Docker, MongoDB), and modern mobile interfaces (React Native / Expo).
                                             </p>
                                         </div>
 
-                                        <div>
-                                            <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white border-b border-white/10 pb-2">
-                                                <GraduationCap className="w-5 h-5 text-primary" />
-                                                Academic Background
+                                        {/* Engineering Experience Highlights */}
+                                        <div className="space-y-4">
+                                            <h3 className="flex items-center gap-2 text-base font-bold text-white border-b border-white/10 pb-2">
+                                                <Briefcase className="w-4 h-4 text-primary" />
+                                                Internship Experience
                                             </h3>
-                                            <div className="space-y-4">
-                                                {/* ESIEA */}
-                                                <div className="group border-l-2 border-white/10 pl-4 hover:border-primary transition-colors">
-                                                    <h4 className="font-bold text-white text-sm md:text-base">Engineering Degree - AI & Data Science</h4>
-                                                    <p className="text-xs md:text-sm text-primary">ESIEA Paris | Double Degree EPI/ESIEA</p>
-                                                    <div className="flex justify-between items-center mt-1">
-                                                        <p className="text-xs text-muted-foreground">2025 - 2027</p>
+                                            
+                                            <div className="space-y-3">
+                                                {/* BeeSafe */}
+                                                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-primary/30 transition-colors">
+                                                    <div className="flex justify-between items-start mb-1">
+                                                        <h4 className="font-bold text-white text-sm">BeeSafe — IoT & Embedded AI Intern</h4>
+                                                        <span className="text-xs text-primary font-medium">Apr – Aug 2026</span>
                                                     </div>
-                                                    <p className="text-xs text-muted-foreground/80 mt-1 italic">
-                                                        ML, Stat. Analysis, Data Mining, Big Data, Python/R, PCA
+                                                    <p className="text-xs text-muted-foreground mb-2">Learning, Data & Robotics (LDR) Lab · ESIEA Paris</p>
+                                                    <p className="text-xs text-white/75 leading-relaxed">
+                                                        Built a complete sensor-to-screen smart beehive monitoring system: Node.js/MongoDB containerized backend, React Native mobile app with real-time SSE telemetry, on-device YOLO11s queen detection with temporal voting, and a two-stage U-Net heatmap frame analysis pipeline running fully offline.
                                                     </p>
                                                 </div>
 
-                                                {/* SIRT */}
-                                                <div className="group border-l-2 border-white/10 pl-4 hover:border-accent transition-colors">
-                                                    <h4 className="font-bold text-white text-sm md:text-base">Railway Communication & IT</h4>
-                                                    <p className="text-xs md:text-sm text-accent">Shijiazhuang Institute (SIRT), China</p>
-                                                    <p className="text-xs text-muted-foreground mt-1">2024 - 2027</p>
-                                                </div>
-
-                                                {/* EPI */}
-                                                <div className="group border-l-2 border-white/10 pl-4 hover:border-purple-400 transition-colors">
-                                                    <h4 className="font-bold text-white text-sm md:text-base">Integrated Preparatory & Engineering Cycle</h4>
-                                                    <p className="text-xs md:text-sm text-purple-400">International Multidisciplinary School (EPI), Tunisia</p>
-                                                    <p className="text-xs text-muted-foreground mt-1">2022 - 2025</p>
+                                                {/* C2I Group */}
+                                                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-accent/30 transition-colors">
+                                                    <div className="flex justify-between items-start mb-1">
+                                                        <h4 className="font-bold text-white text-sm">C2I Group — Full-Stack & Secure Communication Intern</h4>
+                                                        <span className="text-xs text-accent font-medium">Internship</span>
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground mb-2">C2I Group</p>
+                                                    <p className="text-xs text-white/75 leading-relaxed">
+                                                        Developed AES-encrypted and Base64-encoded secure data communication pipelines, implemented an MQTT telemetry publisher-subscriber network, and engineered a responsive corporate platform with React and Node.js.
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="pt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Code2 className="w-4 h-4 text-primary" />
-                                            <span>Data Science • Full Stack Development • UI/UX Design</span>
+                                        {/* Academic Background */}
+                                        <div className="space-y-4">
+                                            <h3 className="flex items-center gap-2 text-base font-bold text-white border-b border-white/10 pb-2">
+                                                <GraduationCap className="w-4 h-4 text-primary" />
+                                                Academic Background
+                                            </h3>
+                                            <div className="space-y-3">
+                                                {/* ESIEA */}
+                                                <div className="border-l-2 border-primary/60 pl-4 py-1">
+                                                    <h4 className="font-bold text-white text-sm">Engineering Degree — AI & Data Science</h4>
+                                                    <p className="text-xs text-primary">ESIEA Paris · Double Degree EPI / ESIEA</p>
+                                                    <p className="text-xs text-muted-foreground mt-0.5">2025 – 2027 · Paris, France</p>
+                                                </div>
+
+                                                {/* SIRT */}
+                                                <div className="border-l-2 border-accent/60 pl-4 py-1">
+                                                    <h4 className="font-bold text-white text-sm">Railway Communication & IT</h4>
+                                                    <p className="text-xs text-accent">Shijiazhuang Institute of Railway Technology (SIRT)</p>
+                                                    <p className="text-xs text-muted-foreground mt-0.5">2024 – 2027 · China</p>
+                                                </div>
+
+                                                {/* EPI */}
+                                                <div className="border-l-2 border-purple-400/60 pl-4 py-1">
+                                                    <h4 className="font-bold text-white text-sm">Integrated Preparatory & Engineering Cycle</h4>
+                                                    <p className="text-xs text-purple-400">International Multidisciplinary School (EPI)</p>
+                                                    <p className="text-xs text-muted-foreground mt-0.5">2022 – 2025 · Tunisia</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Call to Action Footer */}
+                                        <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+                                            <button
+                                                onClick={scrollToContact}
+                                                className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity shadow-lg shadow-primary/20"
+                                            >
+                                                <Mail className="w-4 h-4" />
+                                                <span>Contact for Internship</span>
+                                            </button>
+
+                                            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                                                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                                <span>Open to Paris & Remote Opportunities</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
         </section>
     );
 };
 
 export default HeroSection;
+

@@ -18,20 +18,30 @@ const skills = [
     { name: 'Analyse Exploratoire', category: 'Data Analysis', description: 'Analyzing datasets to summarize their main characteristics.', status: 'expert' },
     { name: 'Excel', category: 'Data Analysis', description: 'Advanced spreadsheet data organization and analysis.', status: 'learning' },
 
-    // Machine Learning
+    // Machine Learning & Deep Learning
+    { name: 'PyTorch', category: 'Machine Learning', description: 'Deep learning framework for training neural networks and computer vision models.', status: 'expert' },
     { name: 'Scikit-learn', category: 'Machine Learning', description: 'Simple and efficient tools for predictive data analysis.', status: 'expert' },
-    { name: 'Random Forest', category: 'Machine Learning', description: 'Ensemble learning method for classification and regression.', status: 'learning' },
+    { name: 'Random Forest', category: 'Machine Learning', description: 'Ensemble learning method for classification and regression.', status: 'expert' },
+    { name: 'YOLO11', category: 'Machine Learning', description: 'State-of-the-art computer vision models for real-time object detection.', status: 'expert' },
+    { name: 'Computer Vision', category: 'Machine Learning', description: 'Image analysis, cell segmentation, heatmap localization, and classification.', status: 'expert' },
+    { name: 'U-Net', category: 'Machine Learning', description: 'Convolutional neural network for dense feature extraction and heatmap generation.', status: 'expert' },
     { name: 'K-Means', category: 'Machine Learning', description: 'Vector quantization method for cluster analysis.', status: 'expert' },
     { name: 'PCA', category: 'Machine Learning', description: 'Principal Component Analysis for dimensionality reduction.', status: 'learning' },
     { name: 'Régression', category: 'Machine Learning', description: 'Estimating the relationships among variables.', status: 'expert' },
     { name: 'Classification', category: 'Machine Learning', description: 'Identifying to which of a set of categories a new observation belongs.', status: 'expert' },
     { name: 'XGBoost', category: 'Machine Learning', description: 'Optimized distributed gradient boosting library.', status: 'learning' },
 
+    // IoT & Embedded Systems
+    { name: 'ESP32', category: 'IoT & Embedded', description: 'Low-power microcontroller with Wi-Fi & Bluetooth for edge sensing.', status: 'expert' },
+    { name: 'LoRa', category: 'IoT & Embedded', description: 'Long-range low-power radio communication protocol for remote telemetry.', status: 'expert' },
+    { name: 'MQTT', category: 'IoT & Embedded', description: 'Lightweight publish/subscribe messaging protocol for IoT systems.', status: 'expert' },
+    { name: 'ONNX Runtime', category: 'Tools', description: 'Cross-platform accelerator for high-performance embedded AI inference.', status: 'expert' },
+
     // Visualization
     { name: 'Tableau', category: 'Visualization', description: 'Interactive data visualization software focused on business intelligence.', status: 'expert' },
     { name: 'Power BI', category: 'Visualization', description: 'Interactive data visualization service by Microsoft.', status: 'learning' },
     { name: 'Data Storytelling', category: 'Visualization', description: 'Communicating insights from a dataset using narratives and visualizations.', status: 'expert' },
-    { name: 'Dashboards', category: 'Visualization', description: 'visual display of the most important information needed to achieve one or more objectives.', status: 'expert' },
+    { name: 'Dashboards', category: 'Visualization', description: 'Visual display of the most important information needed to achieve objectives.', status: 'expert' },
     { name: 'Suivi de KPIs', category: 'Visualization', description: 'Monitoring Key Performance Indicators.', status: 'expert' },
 
     // Databases
@@ -40,15 +50,19 @@ const skills = [
     { name: 'Optimisation', category: 'Database', description: 'Optimisation de Requêtes for better performance.', status: 'expert' },
     { name: 'Modélisation', category: 'Database', description: 'Modélisation de Données for efficient storage.', status: 'expert' },
 
-    // Tools
-    { name: 'Git/GitHub', category: 'Tools', description: 'Version control system and code hosting platform.', status: 'expert' },
-    { name: 'JavaScript', category: 'Language', description: 'High-level, often just-in-time compiled language of the Web.', status: 'expert' },
+    // Mobile & Web
+    { name: 'React Native', category: 'Frontend', description: 'Framework for building native mobile applications using React.', status: 'expert' },
+    { name: 'Expo', category: 'Frontend', description: 'Ecosystem for universal native React application development and native builds.', status: 'expert' },
     { name: 'React', category: 'Frontend', description: 'JavaScript library for building user interfaces.', status: 'expert' },
+    { name: 'JavaScript', category: 'Language', description: 'High-level, dynamic language of modern web development.', status: 'expert' },
     { name: 'Node.js', category: 'Backend', description: 'JavaScript runtime built on Chrome\'s V8 JavaScript engine.', status: 'expert' },
-    { name: 'Jest', category: 'Testing', description: 'Delightful JavaScript Testing Framework with a focus on simplicity.', status: 'learning' },
-    { name: 'AWS', category: 'Cloud', description: 'On-demand cloud computing platforms and APIs.', status: 'expert' },
-    { name: 'Docker', category: 'DevOps', description: 'Platform to use OS-level virtualization to deliver software in packages.', status: 'expert' },
-    { name: 'Jupyter', category: 'Tools', description: 'Project for interactive computing across all programming languages.', status: 'expert' },
+
+    // Tools & DevOps
+    { name: 'Docker', category: 'DevOps', description: 'Platform to containerize applications and manage multi-service architectures.', status: 'expert' },
+    { name: 'Git/GitHub', category: 'Tools', description: 'Version control system and code hosting platform.', status: 'expert' },
+    { name: 'AWS', category: 'Cloud', description: 'On-demand cloud computing platforms and services.', status: 'expert' },
+    { name: 'Jupyter', category: 'Tools', description: 'Interactive computing environment for data science and machine learning.', status: 'expert' },
+    { name: 'Jest', category: 'Testing', description: 'JavaScript testing framework with a focus on simplicity.', status: 'learning' },
     { name: 'Google Analytics', category: 'Tools', description: 'Web analytics service offered by Google.', status: 'learning' },
 ];
 
@@ -129,7 +143,7 @@ const SkillsCloud = ({ onSelect, isModalOpen }: { onSelect: (skill: typeof skill
         return skills.map((_, i) => {
             const phi = Math.acos(-1 + (2 * i) / skills.length);
             const theta = Math.sqrt(skills.length * Math.PI) * phi;
-            const radius = 2.8; // Slightly increased radius for more items
+            const radius = 3.0; // Scaled radius for expanded skill set
             return [
                 radius * Math.cos(theta) * Math.sin(phi),
                 radius * Math.sin(theta) * Math.sin(phi),
@@ -180,7 +194,7 @@ const SkillsSphere = () => {
     }, [selectedSkill]);
 
     return (
-        <section id="skills" className="relative min-h-screen py-24">
+        <section id="skills" className="relative min-h-screen py-24 isolate z-0">
             {/* Section Header */}
             <div className="container px-6 md:px-12 mb-12">
                 <motion.div

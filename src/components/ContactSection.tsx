@@ -73,7 +73,7 @@ const ContactSection = () => {
                             <span className="gradient-text-glow">Something Amazing</span>
                         </h2>
                         <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                            Looking for a dedicated intern? Let's talk about how I can contribute to your team. I am looking for a 4 to 6-month internship starting April 2026.
+                            Looking for a dedicated final year engineering intern? Let's discuss how I can bring value to your team. Actively seeking a 6-month final year internship (PFE) starting February 2027.
                         </p>
                     </motion.div>
 
@@ -176,7 +176,6 @@ const ContactSection = () => {
                                         <h4 className="font-medium mb-1">Email</h4>
                                         <a href="mailto:mohamed.amine.barhoumi.eng@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors">
                                             mohamed.amine.barhoumi.eng@gmail.com
-
                                         </a>
                                     </div>
                                 </div>
@@ -187,7 +186,7 @@ const ContactSection = () => {
                                     </div>
                                     <div>
                                         <h4 className="font-medium mb-1">Location</h4>
-                                        <p className="text-muted-foreground">Cachan, Île-de-France, France</p>
+                                        <p className="text-muted-foreground">Paris, France</p>
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +225,7 @@ const ContactSection = () => {
                                     <span className="text-sm font-medium">Currently Available</span>
                                 </div>
                                 <p className="text-muted-foreground text-sm">
-                                    Actively seeking a 4-6 month internship starting April 2026. Response time: within 24 hours.
+                                    Actively seeking a 6-month Final Year Internship (PFE) starting February 2027. Based in Paris, France. Response time: within 24 hours.
                                 </p>
                             </div>
                         </motion.div>
