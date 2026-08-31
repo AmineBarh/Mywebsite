@@ -192,7 +192,7 @@ Beyond the deliverables, this internship was an opportunity to reason at the sca
         longDescription:
             "Created during the nationwide Nuit de l'Info hackathon, this project showcases creative coding, humorous UX anti-patterns, and out-of-the-box interactive animations.",
         overview: 'Hackathon project demonstrating creative frontend experimentation and physics-based interactions.',
-        image: 'https://picsum.photos/400/400?grayscale',
+        image: '/images/projects/bad-ui.jpg',
         color: 'from-pink-500/20 to-orange-500/20',
         url: 'https://bad-ui-nuit.vercel.app/',
         tech: ['React', 'Tailwind CSS', 'Creative Coding']
@@ -211,7 +211,7 @@ Beyond the deliverables, this internship was an opportunity to reason at the sca
             'Structured backend API endpoints and database models using Node.js, Express, and MongoDB.'
         ],
         outcome: 'Successfully deployed a modern corporate platform presenting organizational training and engineering services.',
-        image: 'https://picsum.photos/500/500?grayscale',
+        image: '/images/projects/c2i-portfolio.jpg',
         color: 'from-green-500/20 to-cyan-500/20',
         url: 'https://c2i-eight.vercel.app/',
         tech: ['React', 'JSX', 'Tailwind', 'MongoDB', 'Node.js', 'Express.js']
