@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, ArrowUpRight, ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
+import { ArrowUpRight } from 'lucide-react';
+import { gsap, useGSAP, MOTION_OK, EASE_OUT } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import BoxButton from '@/components/ui-kit/BoxButton';
 
 const publications = [
     {
@@ -23,110 +25,84 @@ const publications = [
     }
 ];
 
+const lines = ['liked the work?', 'there’s more.'];
+
+/** Off-white band: heavy black statement, then the articles as ruled rows. */
 const Publications = () => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const rootRef = useRef<HTMLElement>(null);
+    useReveal(rootRef);
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add(MOTION_OK, () => {
+                gsap.from('[data-line]', {
+                    yPercent: 108,
+                    duration: 1.2,
+                    stagger: 0.12,
+                    ease: EASE_OUT,
+                    scrollTrigger: { trigger: '[data-statement]', start: 'top 80%', once: true },
+                });
+            });
+            return () => mm.revert();
+        },
+        { scope: rootRef },
+    );
 
     return (
-        <section id="publications" className="relative py-24 overflow-hidden">
-            {/* Background enhancement */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+        <section ref={rootRef} id="publications" className="band-paper pb-24 pt-24 md:pb-32 md:pt-36">
+            <div className="page-shell">
+                <h2 data-statement aria-label="liked the work? there’s more." className="type-heavy text-[clamp(3.75rem,11.4vw,13rem)] text-ink">
+                    {lines.map((line) => (
+                        <span key={line} aria-hidden="true" className="block overflow-hidden pb-[0.06em] pt-[0.04em]">
+                            <span data-line className="block whitespace-nowrap">
+                                {line}
+                            </span>
+                        </span>
+                    ))}
+                </h2>
 
-            <div className="container px-6 md:px-12 relative z-10">
-                {/* Clickable Header Trigger */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-8 cursor-pointer group"
-                    onClick={() => setIsExpanded(!isExpanded)}
-                >
-                    <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6">
-                        Writing & Thoughts
-                    </span>
-                    <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 flex items-center justify-center gap-6">
-                        Selected <span className="gradient-text-glow">Publications</span>
-
-                        <motion.div
-                            animate={{
-                                rotate: isExpanded ? 180 : 0,
-                                scale: isExpanded ? 1.1 : 1,
-                                backgroundColor: isExpanded ? 'rgba(var(--primary), 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                                borderColor: isExpanded ? 'rgba(var(--primary), 0.5)' : 'rgba(255, 255, 255, 0.1)'
-                            }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ duration: 0.4 }}
-                            className={`p-3 rounded-2xl border backdrop-blur-md transition-colors duration-300 ${isExpanded ? 'text-primary shadow-[0_0_20px_rgba(var(--primary),0.3)]' : 'text-muted-foreground'}`}
-                        >
-                            <ChevronDown className="w-8 h-8 md:w-10 md:h-10" />
-                        </motion.div>
-                    </h2>
-                    <p className="text-muted-foreground max-w-xl mx-auto text-lg group-hover:text-white transition-colors">
-                        Tap to {isExpanded ? 'collapse' : 'expand'} my technical articles.
+                <div className="mt-14 flex flex-col justify-between gap-8 md:mt-20 md:flex-row md:items-end">
+                    <p data-reveal className="max-w-[34ch] text-lg leading-snug md:text-xl">
+                        Technical articles on Medium, written after my internships. I write about IoT security and engineering workflow.
                     </p>
-                </motion.div>
+                    <div data-reveal>
+                        <BoxButton tone="light" href="https://medamine-barhoumi.medium.com/">
+                            Visit my Medium
+                        </BoxButton>
+                    </div>
+                </div>
 
-                {/* Collapsible Content */}
-                <AnimatePresence>
-                    {isExpanded && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                            className="overflow-hidden"
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto py-8">
-                                {publications.map((pub, index) => (
-                                    <motion.div
-                                        key={pub.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                        className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)] hover:-translate-y-1"
-                                    >
-                                        <div className="absolute top-8 right-8 text-primary/20 group-hover:text-primary transition-colors duration-300">
-                                            <BookOpen className="w-12 h-12" />
-                                        </div>
-
-                                        <div className="relative z-10">
-                                            <div className="flex flex-wrap gap-2 mb-6">
-                                                <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
-                                                    Medium
-                                                </span>
-                                                <span className="px-3 py-1 rounded-full bg-white/5 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-                                                    {pub.context}
-                                                </span>
-                                            </div>
-
-                                            <h3 className="text-2xl font-display font-bold mb-4 group-hover:text-primary transition-colors duration-300">
-                                                {pub.title}
-                                            </h3>
-
-                                            <p className="text-muted-foreground mb-8 leading-relaxed">
-                                                {pub.description}
-                                            </p>
-
-                                            <a
-                                                href={pub.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 text-sm font-medium text-white hover:text-primary transition-colors group/link"
-                                            >
-                                                Read Article
-                                                <ArrowUpRight className="w-4 h-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                                            </a>
-                                        </div>
-
-                                        {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                <ul className="mt-20 border-t border-ink/20 md:mt-28">
+                    {publications.map((pub) => (
+                        <li key={pub.id} data-reveal className="border-b border-ink/20">
+                            <a
+                                href={pub.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group grid gap-x-10 gap-y-4 py-9 md:grid-cols-[6rem_1fr_auto]"
+                            >
+                                <span className="font-mono text-[11px] text-ink/50">{pub.date}</span>
+                                <span>
+                                    <span className="block max-w-[34ch] text-2xl font-light leading-tight tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-2 md:text-3xl">
+                                        {pub.title}
+                                    </span>
+                                    <span className="mt-4 block max-w-[60ch] text-sm leading-relaxed text-ink/70">{pub.description}</span>
+                                    <span className="mt-5 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.06em] text-ink/60">
+                                        <span className="text-ink">{pub.context}</span>
+                                        {pub.tags.map((tag) => (
+                                            <span key={tag}>{tag}</span>
+                                        ))}
+                                    </span>
+                                </span>
+                                <span className="inline-flex items-center gap-2 self-start font-mono text-[11px] uppercase tracking-[0.06em] md:pt-1">
+                                    Read article
+                                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.25} />
+                                </span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </section>
     );
