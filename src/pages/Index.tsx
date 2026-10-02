@@ -12,9 +12,11 @@ import ContactSection from '@/components/ContactSection';
 import ProfileModal from '@/components/ProfileModal';
 const Impact = lazy(() => import('@/components/Impact'));
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
+import { useImageProtection } from '@/hooks/useImageProtection';
 
 const Index = () => {
     useSmoothScroll();
+    useImageProtection();
     const [profileOpen, setProfileOpen] = useState(false);
 
     return (
