@@ -14,8 +14,12 @@ export default {
         },
         extend: {
             fontFamily: {
-                display: ['Playfair Display', 'serif'],
-                sans: ['Manrope', 'sans-serif'],
+                display: ['Geist Variable', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                heavy: ['Anton', 'Impact', 'sans-serif'],
+                soft: ['Lexend Variable', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                cond: ['Big Shoulders Display Variable', 'Anton', 'sans-serif'],
+                sans: ['Geist Variable', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                mono: ['Geist Mono Variable', 'ui-monospace', 'SFMono-Regular', 'monospace'],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -51,16 +55,9 @@ export default {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                glow: {
-                    primary: "hsl(var(--glow-primary))",
-                    accent: "hsl(var(--glow-accent))",
-                    warm: "hsl(var(--glow-warm))",
-                },
-                aurora: {
-                    1: "hsl(var(--aurora-1))",
-                    2: "hsl(var(--aurora-2))",
-                    3: "hsl(var(--aurora-3))",
-                },
+                paper: "hsl(var(--paper))",
+                ink: "hsl(var(--ink))",
+                forest: "hsl(var(--forest))",
                 sidebar: {
                     DEFAULT: "hsl(var(--sidebar-background))",
                     foreground: "hsl(var(--sidebar-foreground))",
@@ -102,26 +99,6 @@ export default {
                     "0%": { transform: "translateY(100%)" },
                     "100%": { transform: "translateY(0)" },
                 },
-                "float": {
-                    "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
-                    "50%": { transform: "translateY(-20px) rotate(2deg)" },
-                },
-                "pulse-glow": {
-                    "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
-                    "50%": { opacity: "0.8", transform: "scale(1.05)" },
-                },
-                "breathe": {
-                    "0%, 100%": { transform: "scale(1)" },
-                    "50%": { transform: "scale(1.03)" },
-                },
-                "shimmer": {
-                    "0%": { backgroundPosition: "-200% 0" },
-                    "100%": { backgroundPosition: "200% 0" },
-                },
-                "sphere-rotate": {
-                    "0%": { transform: "rotateY(0deg) rotateX(15deg)" },
-                    "100%": { transform: "rotateY(360deg) rotateX(15deg)" },
-                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
@@ -130,16 +107,10 @@ export default {
                 "fade-in-up": "fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
                 "scale-in": "scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
                 "slide-up": "slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-                "float": "float 6s ease-in-out infinite",
-                "pulse-glow": "pulse-glow 4s ease-in-out infinite",
-                "breathe": "breathe 4s ease-in-out infinite",
-                "shimmer": "shimmer 3s ease-in-out infinite",
-                "sphere-rotate": "sphere-rotate 30s linear infinite",
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
                 "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-                "glass-gradient": "linear-gradient(135deg, hsl(var(--glass-shine)), transparent)",
             },
         },
     },
