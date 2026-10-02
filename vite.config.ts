@@ -10,6 +10,17 @@ export default defineConfig(({ mode }) => ({
         port: 8080,
     },
     plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+                    motion: ['framer-motion'],
+                    gsap: ['gsap', '@gsap/react', 'lenis'],
+                },
+            },
+        },
+    },
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),

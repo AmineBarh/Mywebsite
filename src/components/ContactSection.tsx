@@ -1,19 +1,66 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Mail, MapPin, ArrowUpRight } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { toast } from 'sonner';
 import emailjs from '@emailjs/browser';
+import { gsap, useGSAP, MOTION_OK, EASE_OUT } from '@/lib/gsap';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/ui-kit/SectionLabel';
+import BoxButton from '@/components/ui-kit/BoxButton';
+
+type FormData = { name: string; email: string; message: string };
+type Errors = Partial<Record<keyof FormData, string>>;
+
+const validate = (data: FormData): Errors => {
+    const errors: Errors = {};
+    if (data.name.trim().length < 2) errors.name = 'Please enter your name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) errors.email = 'Please enter a valid email address.';
+    if (data.message.trim().length < 10) errors.message = 'Please write at least a short sentence.';
+    return errors;
+};
+
+const fieldClass = (hasError: boolean) =>
+    `w-full border-b bg-transparent py-3 text-lg outline-none transition-colors placeholder:text-muted-foreground/50 focus:border-foreground ${hasError ? 'border-destructive' : 'border-border'
+    }`;
+
+const labelClass = 'font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground';
 
 const ContactSection = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: '',
-    });
+    const rootRef = useRef<HTMLElement>(null);
+    const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
+    const [errors, setErrors] = useState<Errors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useReveal(rootRef);
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add(MOTION_OK, () => {
+                gsap.from('[data-line]', {
+                    yPercent: 108,
+                    duration: 1.3,
+                    stagger: 0.12,
+                    ease: EASE_OUT,
+                    scrollTrigger: { trigger: '[data-statement]', start: 'top 80%', once: true },
+                });
+            });
+            return () => mm.revert();
+        },
+        { scope: rootRef },
+    );
+
+    const update = (key: keyof FormData, value: string) => {
+        const next = { ...formData, [key]: value };
+        setFormData(next);
+        if (errors[key]) setErrors((prev) => ({ ...prev, [key]: validate(next)[key] }));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const found = validate(formData);
+        setErrors(found);
+        if (Object.keys(found).length) return;
+
         setIsSubmitting(true);
 
         // TODO: Replace these with your actual EmailJS credentials
@@ -53,199 +100,157 @@ const ContactSection = () => {
     ];
 
     return (
-        <section id="contact" className="relative py-24 md:py-32">
-            <div className="container px-6 md:px-12">
-                <div className="max-w-6xl mx-auto">
-                    {/* Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center mb-16"
-                    >
-                        <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6">
-                            Get In Touch
+        <section ref={rootRef} id="contact" className="relative z-[1] pt-28 md:pt-40">
+            <div className="page-shell">
+                <h2 data-statement aria-label="let’s work together." className="type-heavy text-[clamp(4.5rem,14vw,16rem)]">
+                    {['let’s work', 'together.'].map((line) => (
+                        <span key={line} aria-hidden="true" className="block overflow-hidden pb-[0.06em] pt-[0.04em]">
+                            <span data-line className="block whitespace-nowrap">
+                                {line}
+                            </span>
                         </span>
-                        <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                            Let's Create
-                            <br />
-                            <span className="gradient-text-glow">Something Amazing</span>
-                        </h2>
-                        <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                            Looking for a dedicated final year engineering intern? Let's discuss how I can bring value to your team. Actively seeking a 6-month final year internship (PFE) starting February 2027.
-                        </p>
-                    </motion.div>
+                    ))}
+                </h2>
 
-                    <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-                        {/* Contact Form */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                        >
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium tracking-wider uppercase text-muted-foreground mb-2">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        required
-                                        className="w-full px-0 py-4 bg-transparent border-b border-border focus:border-primary outline-none transition-colors text-lg"
-                                        placeholder="John Doe"
-                                    />
-                                </div>
+                <p data-reveal className="mt-10 max-w-[54ch] text-lg leading-snug text-muted-foreground md:text-xl">
+                    Looking for a dedicated final year engineering intern? Let's discuss how I can bring value to your team. Actively seeking a 6-month final year internship (PFE) starting February 2027.
+                </p>
 
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium tracking-wider uppercase text-muted-foreground mb-2">
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        required
-                                        className="w-full px-0 py-4 bg-transparent border-b border-border focus:border-primary outline-none transition-colors text-lg"
-                                        placeholder="john@example.com"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label htmlFor="message" className="block text-sm font-medium tracking-wider uppercase text-muted-foreground mb-2">
-                                        Message
-                                    </label>
-                                    <textarea
-                                        id="message"
-                                        value={formData.message}
-                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                        required
-                                        rows={4}
-                                        className="w-full px-0 py-4 bg-transparent border-b border-border focus:border-primary outline-none transition-colors text-lg resize-none"
-                                        placeholder="Tell me about the opportunity..."
-                                    />
-                                </div>
-
-                                <motion.button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="group flex items-center gap-3 px-8 py-4 rounded-full bg-foreground text-background font-medium text-lg hover:opacity-90 transition-all disabled:opacity-50"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    data-magnetic
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <motion.div
-                                                className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full"
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                            />
-                                            Sending...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Send Message
-                                            <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                        </>
-                                    )}
-                                </motion.button>
-                            </form>
-                        </motion.div>
-
-                        {/* Contact Info */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="space-y-12"
-                        >
-                            {/* Info Cards */}
-                            <div className="space-y-6">
-                                <div className="glass rounded-2xl p-6 flex items-start gap-4">
-                                    <div className="p-3 rounded-xl bg-primary/10">
-                                        <Mail className="w-6 h-6 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium mb-1">Email</h4>
-                                        <a href="mailto:mohamed.amine.barhoumi.eng@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors">
-                                            mohamed.amine.barhoumi.eng@gmail.com
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div className="glass rounded-2xl p-6 flex items-start gap-4">
-                                    <div className="p-3 rounded-xl bg-accent/10">
-                                        <MapPin className="w-6 h-6 text-accent" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium mb-1">Location</h4>
-                                        <p className="text-muted-foreground">Paris, France</p>
-                                    </div>
-                                </div>
+                <div className="mt-24 grid gap-16 md:mt-32 lg:grid-cols-12 lg:gap-12">
+                    {/* Form */}
+                    <div className="lg:col-span-7">
+                        <SectionLabel label="Get in touch" />
+                        <form data-reveal onSubmit={handleSubmit} noValidate className="mt-10 space-y-9">
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="name" className={labelClass}>
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    autoComplete="name"
+                                    value={formData.name}
+                                    onChange={(e) => update('name', e.target.value)}
+                                    aria-invalid={!!errors.name}
+                                    aria-describedby={errors.name ? 'name-error' : undefined}
+                                    className={fieldClass(!!errors.name)}
+                                    placeholder="Your full name"
+                                />
+                                {errors.name && (
+                                    <p id="name-error" className="text-sm text-destructive">
+                                        {errors.name}
+                                    </p>
+                                )}
                             </div>
 
-                            {/* Social Links */}
-                            <div>
-                                <h4 className="text-sm font-medium tracking-wider uppercase text-muted-foreground mb-4">
-                                    Connect
-                                </h4>
-                                <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="email" className={labelClass}>
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    autoComplete="email"
+                                    value={formData.email}
+                                    onChange={(e) => update('email', e.target.value)}
+                                    aria-invalid={!!errors.email}
+                                    aria-describedby={errors.email ? 'email-error' : undefined}
+                                    className={fieldClass(!!errors.email)}
+                                    placeholder="you@company.com"
+                                />
+                                {errors.email && (
+                                    <p id="email-error" className="text-sm text-destructive">
+                                        {errors.email}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="message" className={labelClass}>
+                                    Message
+                                </label>
+                                <textarea
+                                    id="message"
+                                    value={formData.message}
+                                    onChange={(e) => update('message', e.target.value)}
+                                    rows={4}
+                                    aria-invalid={!!errors.message}
+                                    aria-describedby={errors.message ? 'message-error' : undefined}
+                                    className={`${fieldClass(!!errors.message)} resize-none`}
+                                    placeholder="Tell me about the opportunity"
+                                />
+                                {errors.message && (
+                                    <p id="message-error" className="text-sm text-destructive">
+                                        {errors.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <BoxButton type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? 'Sending' : 'Send message'}
+                            </BoxButton>
+                        </form>
+                    </div>
+
+                    {/* Details */}
+                    <aside className="lg:col-span-4 lg:col-start-9">
+                        <SectionLabel label="Details" />
+                        <dl>
+                            <div data-reveal className="border-b border-border py-6">
+                                <dt className={labelClass}>Email</dt>
+                                <dd className="mt-2">
+                                    <a href="mailto:mohamed.amine.barhoumi.eng@gmail.com" className="break-all text-lg underline-offset-4 hover:text-primary hover:underline">
+                                        mohamed.amine.barhoumi.eng@gmail.com
+                                    </a>
+                                </dd>
+                            </div>
+                            <div data-reveal className="border-b border-border py-6">
+                                <dt className={labelClass}>Location</dt>
+                                <dd className="mt-2 text-lg">Paris, France</dd>
+                            </div>
+                            <div data-reveal className="border-b border-border py-6">
+                                <dt className={labelClass}>Elsewhere</dt>
+                                <dd className="mt-3 flex flex-col">
                                     {socialLinks.map((link) => (
-                                        <motion.a
+                                        <a
                                             key={link.name}
                                             href={link.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group flex items-center gap-2 px-4 py-2 rounded-full glass hover:bg-secondary transition-colors text-sm"
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            data-magnetic
+                                            className="group flex items-center justify-between border-t border-border py-3 first:border-t-0 hover:text-primary"
                                         >
                                             {link.name}
-                                            <ArrowUpRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
-                                        </motion.a>
+                                            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.25} />
+                                        </a>
                                     ))}
-                                </div>
+                                </dd>
                             </div>
-
-                            {/* Availability */}
-                            <div className="glass rounded-2xl p-6">
-                                <div className="flex items-center gap-3 mb-3">
-                                    <span className="relative flex h-3 w-3">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            <div data-reveal className="py-6">
+                                <dt className={`${labelClass} flex items-center gap-2`}>
+                                    <span className="relative flex h-2 w-2">
+                                        <span className="absolute inline-flex h-full w-full rounded-full bg-primary" style={{ animation: 'status-pulse 2.4s ease-in-out infinite' }} />
+                                        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
                                     </span>
-                                    <span className="text-sm font-medium">Currently Available</span>
-                                </div>
-                                <p className="text-muted-foreground text-sm">
+                                    Currently available
+                                </dt>
+                                <dd className="mt-3 max-w-[40ch] text-sm leading-relaxed text-muted-foreground">
                                     Actively seeking a 6-month Final Year Internship (PFE) starting February 2027. Based in Paris, France. Response time: within 24 hours.
-                                </p>
+                                </dd>
                             </div>
-                        </motion.div>
-                    </div>
+                        </dl>
+                    </aside>
                 </div>
             </div>
 
-            {/* Footer */}
-            <motion.footer
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="container px-6 md:px-12 mt-24 pt-8 border-t border-border"
-            >
-                <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-                    <p>© 2025 Mohamed Amine Barhoumi. All rights reserved.</p>
-                    <p>Vibe coded with passion & precision</p>
+            <footer className="mt-28 overflow-hidden md:mt-40">
+                <div className="page-shell flex flex-col items-start justify-between gap-2 border-t border-border py-5 font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground md:flex-row md:items-center">
+                    <p>© {new Date().getFullYear()} Mohamed Amine Barhoumi</p>
+                    <p>Built with React, GSAP and Tailwind</p>
                 </div>
-            </motion.footer>
+                <p aria-hidden="true" className="type-cond select-none whitespace-nowrap px-5 text-center text-[min(34vw,60dvh)] leading-[0.74] md:px-6" style={{ ['--w' as string]: 100 }}>
+                    BARHOUMI
+                </p>
+            </footer>
         </section>
     );
 };
