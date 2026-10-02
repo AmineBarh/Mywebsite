@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, useGSAP, MOTION_OK, EASE_OUT } from '@/lib/gsap';
 import { scrollToId } from '@/lib/lenis';
 import cutout from '../assets/profile-cutout-pink.webp';
 import ParticleAura from '@/components/ParticleAura';
+import BeardGame from '@/components/BeardGame';
 
 const WORD = 'BARHOUMI'.split('');
 // Resting weights: thin and bold letters alternate, like a type specimen
@@ -160,6 +161,9 @@ const HeroSection = ({ onAbout }: HeroSectionProps) => {
 
             {/* Glowing particle outline, halo and drifting dust over the portrait */}
             <ParticleAura portraitRef={imgRef} src={cutout} />
+
+            {/* Water my beard: click the face and hair grows there */}
+            <BeardGame portraitRef={imgRef} />
 
             {/* Availability, in the empty right column */}
             <div data-hero-in className="absolute right-5 top-[22dvh] hidden max-w-[260px] text-right md:right-6 md:block">

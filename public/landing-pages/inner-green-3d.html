@@ -4309,6 +4309,11 @@ window.__seek   = v => { clock = v; drawn = null; };
   on('.card--stove .knob', function () { fire('open-project', 'beesafe'); });
   on('.scroll', function () { fire('scroll-to', 'impact-results'); });
 
+  /* no right-click menu or dragging on pictures (a deterrent only) */
+  function noSave(e) { if (e.target && e.target.closest && e.target.closest('img, canvas')) e.preventDefault(); }
+  document.addEventListener('contextmenu', noSave, true);
+  document.addEventListener('dragstart', noSave, true);
+
   window.addEventListener('wheel', function (e) {
     fire('sylva:scroll', { dx: e.deltaX, dy: e.deltaY, mode: e.deltaMode });
   }, { passive: true });
