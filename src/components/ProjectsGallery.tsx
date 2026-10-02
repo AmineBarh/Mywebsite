@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReveal } from '@/hooks/useReveal';
 import SectionLabel from '@/components/ui-kit/SectionLabel';
+import Watermark from '@/components/ui-kit/Watermark';
 import BoxButton from '@/components/ui-kit/BoxButton';
 
 export interface ProjectImage {
@@ -327,6 +328,7 @@ const ProjectsGallery = () => {
                                         loading="lazy"
                                         className="h-full w-full object-cover grayscale-[0.35] transition-all duration-700 ease-out group-hover:scale-[1.04] group-hover:grayscale-0"
                                     />
+                                    <Watermark tile={false} />
                                     {project.badge && (
                                         <span className="absolute left-3 top-3 flex items-center gap-2 bg-background/85 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] backdrop-blur-sm">
                                             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -420,6 +422,7 @@ const ProjectsGallery = () => {
                                                         className="h-full w-full object-contain"
                                                     />
                                                 </AnimatePresence>
+                                                <Watermark />
                                             </div>
                                             <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
                                                 <p className={`${monoLabel} max-w-[70ch] text-muted-foreground`}>{galleryImages[activeImageIndex]?.caption ?? galleryImages[activeImageIndex]?.alt}</p>

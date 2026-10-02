@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ZoomIn } from 'lucide-react';
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from '@/lib/gsap';
 import { useReveal } from '@/hooks/useReveal';
+import Watermark from '@/components/ui-kit/Watermark';
 import SectionLabel from '@/components/ui-kit/SectionLabel';
 
 // Correct Imports based on available assets
@@ -150,6 +151,7 @@ const DesignShowcase = () => {
                                             loading="lazy"
                                             className="block h-[52dvh] w-auto max-w-none object-contain transition-transform duration-700 group-hover:scale-[1.03] md:h-[56dvh]"
                                         />
+                                        <Watermark corner={false} />
                                         <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 border border-border bg-background/80 px-3 py-1 font-mono text-xs opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                                             <ZoomIn className="h-3 w-3" strokeWidth={1.5} />
                                             View
@@ -197,7 +199,10 @@ const DesignShowcase = () => {
 
                         <div className="relative z-10 grid min-h-0 flex-1 lg:grid-cols-12">
                             <div className="flex min-h-0 items-center justify-center p-5 md:p-8 lg:col-span-8 lg:border-r lg:border-border">
-                                <img src={selectedDesign.image} alt={selectedDesign.title} className="max-h-full max-w-full object-contain" />
+                                <div className="relative inline-flex max-h-full max-w-full">
+                                    <img src={selectedDesign.image} alt={selectedDesign.title} className="block max-h-[calc(100dvh-170px)] max-w-full object-contain lg:max-h-[calc(100dvh-130px)]" />
+                                    <Watermark />
+                                </div>
                             </div>
                             <div className="flex flex-col justify-end gap-6 border-t border-border p-5 md:p-8 lg:col-span-4 lg:border-t-0">
                                 <h3 className="type-heavy text-[clamp(2.25rem,4vw,4rem)]">{selectedDesign.title}</h3>
