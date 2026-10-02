@@ -129,16 +129,6 @@ const HeroSection = ({ onAbout }: HeroSectionProps) => {
                 </p>
             </div>
 
-            {/* Cool nebula glow behind the figure */}
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                style={{
-                    background:
-                        'radial-gradient(ellipse 38% 46% at 52% 62%, hsl(215 70% 30% / 0.38), transparent 70%), radial-gradient(ellipse 26% 34% at 38% 70%, hsl(228 60% 38% / 0.3), transparent 70%)',
-                }}
-            />
-
             {/* Wordmark */}
             <h1
                 ref={wordRef}
@@ -164,7 +154,6 @@ const HeroSection = ({ onAbout }: HeroSectionProps) => {
                     src={cutout}
                     alt="Mohamed Amine Barhoumi speaking into a microphone"
                     className="block h-full w-auto max-w-none"
-                    style={{ filter: 'brightness(0.72) contrast(1.08) saturate(0.85)' }}
                     draggable={false}
                 />
             </div>

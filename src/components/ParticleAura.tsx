@@ -33,35 +33,7 @@ const ParticleAura = ({ portraitRef, src }: ParticleAuraProps) => {
         let raf = 0;
         let alive = true;
 
-        // ---- outline, interior dots and glow sprites, in image-normalised coordinates ----
-        const inPts: { u: number; v: number }[] = [];
-        let aspect = 0.72;
-
-        const buildFromImage = (img: HTMLImageElement) => {
-            const W = 300;
-            const H = Math.round((W * img.naturalHeight) / img.naturalWidth);
-            aspect = img.naturalWidth / img.naturalHeight;
-            const c = document.createElement('canvas');
-            c.width = W;
-            c.height = H;
-            const x = c.getContext('2d', { willReadFrequently: true })!;
-            x.drawImage(img, 0, 0, W, H);
-            const data = x.getImageData(0, 0, W, H).data;
-            const solid = (i: number, j: number) => data[(j * W + i) * 4 + 3] > 110;
-
-            for (let j = 2; j < H - 2; j++) {
-                for (let i = 2; i < W - 2; i++) {
-                    if (!solid(i, j)) continue;
-                    // the picture is cropped at its right and bottom edges: those are not silhouette
-                    if (i > W - 5 || j > H - 5) continue;
-                    const edge = !solid(i - 1, j) || !solid(i + 1, j) || !solid(i, j - 1) || !solid(i, j + 1);
-                    if (!edge && i % 7 === 0 && j % 7 === 0) {
-                        inPts.push({ u: i / W, v: j / H });
-                    }
-                }
-            }
-
-        };
+        let ready = false;
 
         // ---- dust ----
         type Mote = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; ph: number };
@@ -146,20 +118,12 @@ const ParticleAura = ({ portraitRef, src }: ParticleAuraProps) => {
                 ctx.fillRect(m.x, m.y, m.r, m.r);
             }
 
-            if (pw > 0) {
-                // interior dotted texture
-                ctx.fillStyle = rim(0.16 * appear);
-                const s = Math.max(0.8, pw / 560);
-                for (const p of inPts) ctx.fillRect(x0 + p.u * pw, y0 + p.v * ph, s, s);
-            }
-
             ctx.globalCompositeOperation = 'source-over';
             raf = reduce || !alive ? 0 : requestAnimationFrame(draw);
         };
 
         // only animate while the hero is on screen and the tab is visible
         let onScreen = true;
-        let ready = false;
         const sync = () => {
             const run = ready && onScreen && !document.hidden && !reduce;
             if (run && !raf) raf = requestAnimationFrame(draw);
@@ -178,7 +142,6 @@ const ParticleAura = ({ portraitRef, src }: ParticleAuraProps) => {
         const img = new Image();
         img.onload = () => {
             if (!alive) return;
-            buildFromImage(img);
             ready = true;
             if (reduce) requestAnimationFrame(draw);
             sync();
