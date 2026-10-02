@@ -66,6 +66,7 @@
     gap: 0;
   }
   .contact div { margin-bottom: 1px; }
+  .contact a { color: inherit; text-decoration: none; }
   .sep { color: var(--line); margin: 0 8px; }
 
   /* ---------- Sections ---------- */
@@ -104,14 +105,15 @@
     list-style: none;
   }
   ul.bullets li {
-    position: relative;
     padding-left: 11px;
+    text-indent: -11px;
     margin-bottom: 1.5px;
   }
   ul.bullets li::before {
     content: "‣";
-    position: absolute;
-    left: 0;
+    display: inline-block;
+    width: 11px;
+    text-indent: 0;
     color: var(--navy-soft);
     font-weight: 700;
   }
@@ -145,12 +147,12 @@
       <div class="avail">Disponible pour un stage de fin d'études de 6 mois à partir de février 2027</div>
       <div class="contact">
         <div>
-          +33 6 36 04 47 96<span class="sep">|</span>mohamed.amine.barhoumi.eng@gmail.com<span class="sep">|</span>Paris, France
+          +33 6 36 04 47 96<span class="sep">|</span><a href="mailto:mohamed.amine.barhoumi.eng@gmail.com">mohamed.amine.barhoumi.eng@gmail.com</a><span class="sep">|</span>Paris, France
         </div>
       </div>
       <div class="contact">
         <div>
-          linkedin.com/in/mohamed-amine-b-engineer<span class="sep">|</span>github.com/AmineBarh<span class="sep">|</span>amine-portfolio-lilac.vercel.app
+          <a href="https://linkedin.com/in/mohamed-amine-b-engineer">linkedin.com/in/mohamed-amine-b-engineer</a><span class="sep">|</span><a href="https://github.com/AmineBarh">github.com/AmineBarh</a><span class="sep">|</span><a href="https://amine-portfolio-lilac.vercel.app">https://amine-portfolio-lilac.vercel.app</a>
         </div>
       </div>
     </div>
@@ -168,16 +170,16 @@
 
     <div class="entry">
       <div class="entry-head">
-        <span class="entry-title">Stagiaire Ingénieur IA &amp; IoT - Projet BeeSafe</span>
+        <span class="entry-title">Stagiaire Ingénieur IA &amp; IoT</span>
         <span class="entry-dates">Avr. 2026 - Août 2026</span>
       </div>
       <div class="entry-org">LDR (Learning Data Robotics), Paris, France · Recherche &amp; Développement</div>
       <ul class="bullets">
-        <li>Conçu l'architecture IoT des capteurs (poids, audio, température) sur ESP32, LoRa, MQTT.</li>
-        <li>Entraîné des modèles YOLOv8/v11 (PyTorch, OpenCV) atteignant un mAP &gt; 85 % pour la détection en ruche.</li>
-        <li>Déployé un pipeline U-Net + CNN pour la classification de cadres, exporté en ONNX pour un fonctionnement hors connexion.</li>
-        <li>Développé une application mobile React Native (GPS, supervision vocale temps réel).</li>
-        <li>Déployé la stack Docker/MongoDB en production et présenté le système à plus de 50 partenaires industriels.</li>
+        <li>Conception de l'architecture IoT du projet BeeSafe (capteurs de poids, audio, température) sur ESP32, LoRa, MQTT.</li>
+        <li>Entraînement de modèles YOLOv8/v11 (PyTorch, OpenCV) : mAP supérieur à 85 % pour la détection en ruche.</li>
+        <li>Déploiement d'un pipeline U-Net + CNN pour la classification de cadres, avec export ONNX pour un fonctionnement hors connexion.</li>
+        <li>Développement d'une application mobile React Native (GPS, supervision vocale temps réel).</li>
+        <li>Déploiement de la stack Docker/MongoDB en production, présentation à plus de 50 partenaires industriels.</li>
       </ul>
     </div>
 
@@ -188,9 +190,9 @@
       </div>
       <div class="entry-org">C2I Group, Tunisie</div>
       <ul class="bullets">
-        <li>Développé et déployé en production un site vitrine (React/Node.js).</li>
-        <li>Sécurisé la télémétrie IoT (MQTT/ESP32) via un chiffrement AES-CBC en C/C++.</li>
-        <li>Structuré la persistance des données sur MongoDB et collaboré via GitLab (merge requests, revues de code).</li>
+        <li>Développement et déploiement en production d'un site vitrine (React/Node.js).</li>
+        <li>Sécurisation de la télémétrie IoT (MQTT/ESP32) via un chiffrement AES-CBC en C/C++.</li>
+        <li>Structuration de la persistance MongoDB et collaboration via GitLab (merge requests, revues de code).</li>
       </ul>
     </div>
 
@@ -201,8 +203,8 @@
       </div>
       <div class="entry-org">BIOMEDIQA, Tunisie</div>
       <ul class="bullets">
-        <li>Déployé une instance Gitea auto-hébergée et optimisé les pipelines CI/CD (-30 % temps d'intégration).</li>
-        <li>Formé l'équipe d'ingénierie aux environnements Linux et Git.</li>
+        <li>Déploiement d'une instance Gitea auto-hébergée et optimisation des pipelines CI/CD (-30 % temps d'intégration).</li>
+        <li>Formation de l'équipe d'ingénierie aux environnements Linux et Git.</li>
       </ul>
     </div>
   </section>
@@ -216,8 +218,8 @@
         <span class="entry-dates">2025 - 2026</span>
       </div>
       <ul class="bullets">
-        <li>API REST (Node.js) pour gestion hospitalière et prise de rendez-vous.</li>
-        <li>Scraper Doctolib + moteur de scoring probabiliste (10+ facteurs de santé).</li>
+        <li>Développement d'une API REST (Node.js) pour la gestion hospitalière et la prise de rendez-vous.</li>
+        <li>Construction d'un scraper Doctolib et d'un moteur de scoring probabiliste (10+ facteurs de santé).</li>
       </ul>
     </div>
 
@@ -227,8 +229,8 @@
         <span class="entry-dates">2025</span>
       </div>
       <ul class="bullets">
-        <li>EDA et préparation de données (NumPy, Pandas) sur datasets médicaux.</li>
-        <li>Dashboards Tableau / Seaborn pour data storytelling.</li>
+        <li>Réalisation de l'analyse exploratoire et de la préparation de données (NumPy, Pandas) sur des datasets médicaux.</li>
+        <li>Conception de dashboards Tableau / Seaborn pour le data storytelling.</li>
       </ul>
     </div>
   </section>
@@ -237,7 +239,7 @@
     <h2>Éducation</h2>
     <div class="entry">
       <div class="entry-head">
-        <span class="entry-title">Diplôme d'Ingénieur - IA &amp; Data Science (M.Eng, grade Master)</span>
+        <span class="entry-title">Diplôme d'Ingénieur - IA &amp; Data Science</span>
         <span class="entry-dates">2025 - 2027</span>
       </div>
       <div class="entry-org">ESIEA Paris, grande école d'ingénieurs · Double diplôme EPI / ESIEA (en cours)</div>
