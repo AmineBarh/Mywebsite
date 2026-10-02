@@ -4,7 +4,8 @@ import { gsap, ScrollTrigger, useGSAP, MOTION_OK, EASE_OUT } from '@/lib/gsap';
 import { scrollToId } from '@/lib/lenis';
 import cutout from '../assets/profile-cutout-pink.webp';
 import ParticleAura from '@/components/ParticleAura';
-import BeardGame from '@/components/BeardGame';
+import ShaveGame from '@/components/ShaveGame';
+import cutoutBald from '../assets/profile-cutout-bald.webp';
 
 const WORD = 'BARHOUMI'.split('');
 // Resting weights: thin and bold letters alternate, like a type specimen
@@ -157,13 +158,12 @@ const HeroSection = ({ onAbout }: HeroSectionProps) => {
                     className="block h-full w-auto max-w-none"
                     draggable={false}
                 />
+                {/* Make me bald: shave the hair away to reveal the bald photo */}
+                <ShaveGame portraitRef={imgRef} hairSrc={cutout} baldSrc={cutoutBald} />
             </div>
 
             {/* Glowing particle outline, halo and drifting dust over the portrait */}
             <ParticleAura portraitRef={imgRef} src={cutout} />
-
-            {/* Water my beard: click the face and hair grows there */}
-            <BeardGame portraitRef={imgRef} />
 
             {/* Availability, in the empty right column */}
             <div data-hero-in className="absolute right-5 top-[22dvh] hidden max-w-[260px] text-right md:right-6 md:block">
