@@ -6,6 +6,15 @@ import BoxButton from '@/components/ui-kit/BoxButton';
 
 const publications = [
     {
+        id: 3,
+        title: "Our bee comb detector hit a ceiling. The model was fine. The labels weren't.",
+        description: "Why a cell detector for beehive frames stopped improving: the public dataset's annotations cover only a small share of the cells really present, so the labels, not the model, set the limit. Written after my BeeSafe internship.",
+        link: "https://medamine-barhoumi.medium.com/our-bee-comb-detector-hit-a-ceiling-the-model-was-fine-the-labels-werent-1c5a745697db",
+        tags: ["U-Net", "Computer Vision", "Data quality", "BeeSafe"],
+        context: "Internship at BeeSafe",
+        date: "2026"
+    },
+    {
         id: 1,
         title: "Secure MQTT Communication with ESP32: AES Encryption & Decryption (Step-by-Step)",
         description: "A comprehensive guide on implementing secure MQTT communication using AES encryption on ESP32 microcontrollers. Written following my internship at C2I.",
